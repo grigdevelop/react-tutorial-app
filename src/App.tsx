@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// src/App.tsx
 
-function App() {
+import React from "react";
+import "./App.css";
+import { AlbumsComponent } from "./components/albums/albums.component";
+
+// Again, we're importing React-specific redux function.
+import { connect } from "react-redux";
+import { RootState } from "./stores/root.store";
+
+interface Props {
+  appTitle: string;
+}
+
+// Components can be declared as function and its first argument will be his props.
+function App(props: Props) {
+  const { appTitle } = props; // Just extracting appTitle field from props, before rendering HTML.
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{appTitle}</h1>
+      <AlbumsComponent />
     </div>
   );
 }
 
-export default App;
+function mapStateToProps(state: RootState): Props {
+  return {
+    appTitle: state.title
+  };
+}
+
+const connectedComponent = connect(mapStateToProps)(App);
+
+// Now, instead of App component, we're exporting our new, connected component.
+export default connectedComponent;
